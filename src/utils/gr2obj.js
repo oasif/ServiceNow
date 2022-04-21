@@ -30,7 +30,7 @@ gr2obj = function (gr) {
 //========= USAGE ==============================================
 var gr = new GlideRecord('incident');
 // Get an incident record
-gr.get('96cef4561b3530108b59a8e5604bcb74');
+gr.get('213d987f87b4491460d7edb73cbb35b8');
 // Call the script include
 var obj = gr2obj(gr);
 // Stringify the object and display

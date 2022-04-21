@@ -1,3 +1,6 @@
+
+// sys_dictionary
+// need to account for sys_dictionary_override
 var out_file = '\nTable,Field name,Label,Mandatory,Updated By,Update Date,Update Name\n';
 var eQuery = 'mandatory!=false^nameSTARTSWITHcmdb_ci_';
 var dict = new GlideRecord('sys_dictionary');
