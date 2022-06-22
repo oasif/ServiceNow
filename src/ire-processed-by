@@ -1,0 +1,62 @@
+var baseClasses = ['cmdb_ci_hardware', 'cmdb_ci_vm_instance'];
+
+function getExtendedTables(baseTableList) {
+    var allTables = [];
+    var arrayUtil = new ArrayUtil();
+    for (var i = 0; i < baseTableList.length; i++) {
+        var baseTable = baseTableList[i];
+        var tblUtil = new TableUtils(baseTable);
+        // convertArray  to comma delimited string
+        var tables = arrayUtil.convertArray(tblUtil.getAllExtensions());
+        arrayUtil.concat(allTables, tables);
+    }
+    return allTables;
+}
+
+var allTables = getExtendedTables(baseClasses);
+
+//Get count of total active records
+var ci = new GlideAggregate('cmdb_ci');
+ci.addEncodedQuery('operational_status=1^install_status=1^sys_class_nameIN' + allTables.join(','));
+ci.addAggregate('COUNT');
+ci.query();
+
+var total = 0;
+if (ci.next()) {
+    total = ci.getAggregate('COUNT');
+}
+
+//generate list of sys_ids from desired tables - target_sys_id field on sys_object_source is a document ID so we can't do any dot walking.
+var sys_ids = [];
+var ci_source = new GlideAggregate('sys_object_source');
+ci_source.addAggregate('COUNT', 'target_sys_id');
+ci_source.orderBy('target_sys_id');
+
+ci_source.addEncodedQuery('target_tableIN' + allTables.join(','));
+ci_source.query();
+var ireCount = 0;
+while (ci_source.next()) {
+    sys_ids.push(ci_source.getValue('target_sys_id'));
+}
+
+//Use the list of sys_ids combined with active fields for aggregate query
+var ire_ci = new GlideAggregate('cmdb_ci');
+ire_ci.addEncodedQuery('operational_status=1^install_status=1^sys_idIN' + sys_ids.join(','));
+ire_ci.addAggregate('COUNT');
+ire_ci.query();
+
+if (ire_ci.next()) {
+    ireCount = ire_ci.getAggregate('COUNT');
+}
+var perc = 0;
+if (total > 0) {
+    perc = ireCount / total * 100;
+}
+
+var pie = {
+    "key": "total",
+    "key_display": "Percent of Active Hardware and VM Instance CIs processed via IRE",
+    "value": perc.toFixed(2)
+};
+
+gs.print(JSUtil.describeObject(pie));

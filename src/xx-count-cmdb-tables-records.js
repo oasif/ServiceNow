@@ -1,8 +1,10 @@
+//replaced by ci-class.js
+
 var out = '\n# of records,Table,Label\n'
 
 var getForm = function () {
     var gq = new GlideRecord('sys_db_object');
-    gq.addEncodedQuery('nameSTARTSWITHcmdb_ci');
+    gq.addEncodedQuery('nameSTARTSWITHcmdb_ci_');
     gq.query();
     while (gq.next()) {
         var id = gq.getValue('sys_id');
