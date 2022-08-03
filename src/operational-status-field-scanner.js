@@ -1,176 +1,97 @@
 function fieldInRules() {
-    var _field = "operational_status";
+    // note: if the need is to search for a field occurance, use line 3 instead of line 4
+    // var _field = "operational_status"
+    var _field = "operational_status = 6";
     var checks = [
         {
             name: "Business Rule",
             points: 2,
-            table: "sys_script", 
-            fields: [
-                "template",
-                "filter_condition",
-                "condition",
-                "script"
-            ]
-        },
-        {
-            name: "Assignment Rule",
-            points: 2,
-            table: "sysrule_assignment",
-            fields: [
-                "condition",
-                "group"
-            ]
-        },
-        {   
-            name: "SLA Definition",
-            points: 2,
-            table: "contract_sla",
-            fields: [
-                "start_condition",
-                "cancel_condition"
-            ]
+            table: "sys_script",
+            query:"filter_conditionLIKE" + _field + "^ORtemplateLIKE" + _field + "^ORconditionLIKE" + _field + "^ORscriptLIKE" + _field + "^active=true"
         },
         {
             name: "Script Include",
             points: 2,
             table: "sys_script_include",
-            fields: [
-                "script"
-            ]
+            query: "scriptLIKE" + _field + "^active=true"
         },
         {
             name: "Catalog Client Script",
             points: 2,
             table: "catalog_script_client",
-            fields: [
-                "script"
-            ]
+            query: "scriptLIKE" + _field + "^active=true"
         },
         {
             name: "Scheduled Script Execution",
             points: 2,
             table: "sysauto_script",
-            fields: [
-                "script"
-            ]
+            query: "scriptLIKE" + _field + "^active=true"
         },
         {   
             name: "Discovery Pattern",
             points: 2,
             table: "sa_pattern",
-            fields: [
-                "ndl"
-            ]
+            query: "ndlLIKE" + _field + "^active=true"
         },
         {   
             name: "Discovery Sensor",
             points: 2,
             table: "discovery_sensor",
-            fields: [
-                "script"
-            ]
-        },
-        {   
-            name: "Discovery Probes",
-            points: 2,
-            table: "discovery_probes",
-            fields: [
-                "post_processor_script"
-            ]
-        },
-        {   
-            name: "Discovery Probe Parameter",
-            points: 2,
-            table: "discovery_probe_parameter",
-            fields: [
-                "value",
-                "value_script" 
-            ]
-        },
-        {   
-            name: "Email Action",
-            points: 2,
-            table: "sysevent_email_action",
-            fields: [
-                "advanced_condition"
-            ]
+            query: "scriptLIKE" + _field + "^active=true"
         },
         {
             name: "Flow Record Triggers",
             points: 2,
             table: "sys_flow_record_trigger",
-            fields: [
-                "condition"
-            ]
-        },
-        {
-            name: "Flow Snapshots",
-            points: 3,
-            table: "sys_flow_report_snapshot",
-            fields: [
-                "payload"
-            ]
+            query: "conditionLIKE" + _field + "^active=true"
         },
         {
             name: "Transform Field Map Script",
             points: 2,
             table: "sys_transform_entry",
-            fields: [
-                "source_script",
-                "source_field"
-            ]
+            query: "source_fieldLIKE" + _field + "^ORsource_scriptLIKE" + _field
         },
         {
             name: "Transform Script",
             points: 2,
             table: "sys_transform_script",
-            fields: [
-                "script",
-            ]
+            query: "scriptLIKE" + _field + "^active=true"
         },
         {
             name: "Transform Processing",
             points: 2,
             table: "sys_transform_map",
-            fields: [
-                "script"
-            ]
+            query: "scriptLIKE" + _field + "^active=true"
         },
         {
-            name: "ACLs",
+            name: "ACLs*",
             points: 3,
             table: "sys_security_acl",
-            fields: [
-                "name"
-            ]
+            query: "nameLIKE" + _field + "^active=true"
         },
         {
-            name: "DB Views",
+            name: "DB Views*",
             points: 3,
             table: "sys_db_view_table",
-            fields: [
-                "where_clause"
-            ]
+            query: "where_clauseLIKE" + _field + "^active=true"
         },
         {
             name: "Workflows",
             points: 4,
             table: "sys_variable_value",
-            fields: [
-                "value"
-            ]
+            query: "valueLIKE" + _field 
         },
         {
             name: "Reference Qualifiers",
             points: 3,
             table: "sys_dictionary",
-            query: "reference_qual_conditionLIKE" + _field
+            query: "reference_qual_conditionLIKE" + _field + "^active=true"
         },
         {
             name: "Reports",
             points: 2,
             table: "sys_report",
-            query:  "filterLIKE" + _field
+            query:  "filterLIKE" + _field + "^is_published=true"
         }
     ];
 
@@ -185,6 +106,7 @@ function fieldInRules() {
                var checkCount = 0;
                 while (findRule.next()) {
                     checkCount++;
+                    gs.info(findRule.findRule.sys_id);
                 }
                 out += "\n" + check.name + "," + check.table + "," + field + "," + checkCount + "," + check.points + "," + checkCount*check.points;
             });
