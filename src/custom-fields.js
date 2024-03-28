@@ -1,4 +1,4 @@
-var arr = ['cmdb_ci_appl,u_planned_retirement_date',
+var classArr = ['cmdb_ci_appl,u_planned_retirement_date',
     'cmdb_ci,u_antivirus',
     'cmdb_ci,u_antivirus_opex_cost',
     'cmdb_ci,u_antivirus_total_cost',
@@ -230,6 +230,16 @@ var arr = ['cmdb_ci_appl,u_planned_retirement_date',
     'uuu_database_appliance,u_osversion',
     'uuu_database_appliance,u_storage'];
 
+    // var aggQuery = new GlideAggregate('cmdb_ci');
+    // aggQuery.groupBy('sys_class_name');
+    // aggQuery.query();
+    // var classArr = [];
+    // while (aggQuery.next()) {
+    //     classArr.push(aggQuery.sys_class_name + '');
+    // }
+    // gs.info(JSON.stringify(classArr));
+    
+
 var getCountRecordsCustomFieldNotEmpty = function (_table, _field) {
     var recCount = 0;
     // Get count of entries in table.
@@ -247,7 +257,7 @@ var getCountRecordsCustomFieldNotEmpty = function (_table, _field) {
 };
 
 var out = 'table,field,count\n';
-arr.forEach(function (item) {
+classArr.forEach(function (item) {
     var itemArr = item.split(',');
     var table = itemArr[0];
     var field = itemArr[1];
