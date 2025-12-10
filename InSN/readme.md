@@ -1,4 +1,7 @@
 ## The InSN Application
+Link to the demo video:
+[InSN FREE Application: ServiceNow CSDM Explorer](https://www.youtube.com/watch?v=X2Rom_ww7hc&list=PL5DgOfLBA3RanN94xRB4tZGY6aoKeFM_b&index=5)
+
 InSN is a no-code custom application designed to intuitively visualize and simplify intricate workflows, business processes, and complex models.
 
 The content of InSN is called a view, which is an interactive dashboard that contains all the visualzation elements for the content
